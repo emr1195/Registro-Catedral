@@ -26,171 +26,404 @@
   </script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Oswald:wght@500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Oswald:wght@500;700&display=swap');
 
-    :root {
-      --brand-blue: #1a3a82;
-      --brand-dark: #0f1c3f;
-      --brand-red: #b30000;
-      --brand-yellow: #ffcc00;
-    }
+  :root {
+    --brand-blue: #1a3a82;
+    --brand-dark: #0f1c3f;
+    --brand-red: #b30000;
+    --brand-yellow: #ffcc00;
+  }
 
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #e2e8f0;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Oswald', sans-serif;
+    margin: 0;
+  }
+
+  .a4-container {
+    width: 100%;
+    max-width: 900px;
+    min-height: 100vh;
+    position: relative;
+    background: #ffffff;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    border: 2px solid var(--brand-blue);
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .corner-logo {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 78px;
+    height: 78px;
+    object-fit: contain;
+    z-index: 30;
+  }
+
+  .watermark-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(520px, 78%);
+    transform: translate(-50%, -50%);
+    opacity: 0.05;
+    z-index: 2;
+    pointer-events: none;
+    object-fit: contain;
+  }
+
+  .content-wrap {
+    padding: 40px;
+    position: relative;
+    z-index: 20;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 32px;
+    border-bottom: 2px solid #bfdbfe;
+    padding-bottom: 24px;
+    position: relative;
+  }
+
+  .page-header h2 {
+    color: #b91c1c;
+    letter-spacing: 0.18em;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .page-header h1 {
+    color: #1e3a8a;
+    font-size: 4rem;
+    line-height: 0.95;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .page-header p {
+    color: #4b5563;
+    margin-top: 14px;
+    font-size: 1.15rem;
+    line-height: 1.45;
+    letter-spacing: 0.05em;
+  }
+
+  .header-line {
+    width: 130px;
+    height: 5px;
+    background: var(--brand-yellow);
+    border-radius: 999px;
+    margin: 18px auto 0;
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 10;
+    border-radius: 18px;
+    padding: 24px;
+  }
+
+  .custom-input,
+  .custom-select,
+  .custom-textarea {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    padding: 14px 16px;
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .custom-input:focus,
+  .custom-select:focus,
+  .custom-textarea:focus {
+    border-color: var(--brand-blue);
+    outline: none;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(26, 58, 130, 0.2);
+  }
+
+  .radio-container input[type="radio"] {
+    display: none;
+  }
+
+  .radio-label {
+    position: relative;
+    padding: 12px 16px 12px 38px;
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    color: #334155;
+    font-weight: 600;
+    background: #f8fafc;
+    display: block;
+    text-align: center;
+    min-height: 48px;
+  }
+
+  .radio-label:before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    background: #ffffff;
+  }
+
+  .radio-container input[type="radio"]:checked + .radio-label {
+    background: #eff6ff;
+    border-color: var(--brand-blue);
+    color: var(--brand-blue);
+  }
+
+  .radio-container input[type="radio"]:checked + .radio-label:after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--brand-blue);
+    border-radius: 50%;
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-dark));
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    color: white;
+    font-weight: 700;
+    padding: 16px 20px;
+    border-radius: 14px;
+    box-shadow: 0 10px 18px rgba(15, 28, 63, 0.18);
+    font-size: 1rem;
+  }
+
+  .submit-btn:hover {
+    filter: brightness(1.05);
+  }
+
+  .section-title {
+    font-size: 2rem;
+    color: #1e3a8a;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d1d5db;
+  }
+
+  .section-title.red {
+    color: #b91c1c;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 8px 2px;
+  }
+
+  .form-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .full {
+    grid-column: 1 / -1;
+  }
+
+  .footer-note {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 14px;
+    font-style: italic;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
     body {
-      background-color: #e2e8f0;
-      font-family: 'Montserrat', sans-serif;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-
-    h1, h2, h3 {
-      font-family: 'Oswald', sans-serif;
+      padding: 8px;
     }
 
     .a4-container {
-      width: 210mm;
-      min-height: 297mm;
-      position: relative;
-      background: #ffffff;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-      border: 2px solid var(--brand-blue);
-      overflow: hidden;
-      margin: 0 auto;
+      max-width: 100%;
+      min-height: auto;
+      border-width: 1.5px;
+    }
+
+    .content-wrap {
+      padding: 20px 16px 24px;
     }
 
     .corner-logo {
-      position: absolute;
-      top: 18px;
-      left: 18px;
-      width: 90px;
-      height: 90px;
-      object-fit: contain;
-      z-index: 30;
+      top: 10px;
+      left: 10px;
+      width: 56px;
+      height: 56px;
     }
 
     .watermark-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 520px;
-      max-width: 78%;
-      transform: translate(-50%, -50%);
-      opacity: 0.05;
-      z-index: 2;
-      pointer-events: none;
-      object-fit: contain;
+      width: 88%;
+      opacity: 0.04;
+    }
+
+    .page-header {
+      margin-bottom: 22px;
+      padding-top: 8px;
+      padding-bottom: 18px;
+    }
+
+    .page-header h2 {
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      margin-left: 54px;
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      line-height: 0.92;
+      margin-top: 8px;
+    }
+
+    .page-header p {
+      font-size: 0.95rem;
+      line-height: 1.35;
+      margin-top: 10px;
+      padding: 0 6px;
+    }
+
+    .header-line {
+      width: 96px;
+      height: 4px;
+      margin-top: 14px;
     }
 
     .glass-panel {
-      background: rgba(255, 255, 255, 0.94);
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      position: relative;
-      z-index: 10;
+      padding: 18px 16px;
+      border-radius: 16px;
+    }
+
+    .section-title {
+      font-size: 1.55rem;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .radio-container {
+      grid-template-columns: 1fr !important;
     }
 
     .custom-input,
     .custom-select,
     .custom-textarea {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      color: #1e293b;
-      transition: all 0.3s ease;
-      border-radius: 10px;
-      padding: 12px 16px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .custom-input:focus,
-    .custom-select:focus,
-    .custom-textarea:focus {
-      border-color: var(--brand-blue);
-      outline: none;
-      background: #ffffff;
-      box-shadow: 0 0 0 2px rgba(26, 58, 130, 0.2);
-    }
-
-    .radio-container input[type="radio"] {
-      display: none;
-    }
-
-    .radio-label {
-      position: relative;
-      padding: 10px 16px 10px 35px;
-      cursor: pointer;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      color: #334155;
-      font-weight: 600;
-      background: #f8fafc;
-      display: block;
-      text-align: center;
-    }
-
-    .radio-label:before {
-      content: '';
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      border: 2px solid #cbd5e1;
-      border-radius: 50%;
-      background: #ffffff;
-    }
-
-    .radio-container input[type="radio"]:checked + .radio-label {
-      background: #eff6ff;
-      border-color: var(--brand-blue);
-      color: var(--brand-blue);
-    }
-
-    .radio-container input[type="radio"]:checked + .radio-label:after {
-      content: '';
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 8px;
-      height: 8px;
-      background: var(--brand-blue);
-      border-radius: 50%;
+      font-size: 16px;
     }
 
     .submit-btn {
-      background: linear-gradient(135deg, var(--brand-blue), var(--brand-dark));
-      border: none;
-      cursor: pointer;
+      padding: 15px 18px;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .content-wrap {
+      padding: 18px 12px 22px;
     }
 
-    .submit-btn:hover {
-      filter: brightness(1.05);
+    .corner-logo {
+      width: 50px;
+      height: 50px;
     }
-  </style>
+
+    .page-header h2 {
+      font-size: 0.82rem;
+      margin-left: 46px;
+    }
+
+    .page-header h1 {
+      font-size: 2.45rem;
+    }
+
+    .page-header p {
+      font-size: 0.88rem;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+    }
+
+    .field-label {
+      font-size: 0.82rem;
+    }
+  }
+</style>
+
 </head>
 <body>
   <div class="a4-container">
     <img src="emblema bandera 3.0.png" alt="Logo Exploradores del Rey" class="corner-logo">
     <img src="emblema bandera 3.0.png" alt="Marca de agua" class="watermark-logo">
 
-    <div class="p-10 relative z-20 h-full flex flex-col">
-      <header class="text-center mb-8 border-b-2 border-blue-200 pb-6 relative">
-        <h2 class="text-red-700 tracking-widest text-lg font-bold mb-1">Destacamento N°1</h2>
-        <h1 class="text-5xl font-extrabold text-blue-900 tracking-wide uppercase">
-          Exploradores del Rey
-        </h1>
-        <p class="text-gray-600 mt-2 font-medium tracking-wide">FORMULARIO DE INSCRIPCIÓN OFICIAL</p>
-        <div class="w-32 h-1 bg-yellow-400 mx-auto mt-4 rounded-full"></div>
+    <div class="content-wrap">
+      <header class="page-header">
+        <h2>Destacamento N°1</h2>
+        <h1>Exploradores<br>del Rey</h1>
+        <p>FORMULARIO DE INSCRIPCIÓN OFICIAL</p>
+        <div class="header-line"></div>
       </header>
 
       <form id="registerForm" class="flex-grow flex flex-col gap-6">
         <div class="glass-panel rounded-xl p-6">
-          <h3 class="text-2xl text-blue-900 font-bold uppercase tracking-wider mb-5 border-b pb-2">
-            Datos del Explorador
-          </h3>
+          <h3 class="section-title">Datos del Explorador</h3>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
@@ -241,9 +474,7 @@
         </div>
 
         <div class="glass-panel rounded-xl p-6">
-          <h3 class="text-2xl text-red-700 font-bold uppercase tracking-wider mb-5 border-b pb-2">
-            Datos del Acudiente
-          </h3>
+          <h3 class="section-title red">Datos del Acudiente</h3>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div class="md:col-span-2">
