@@ -295,65 +295,64 @@
     const submitBtn = document.getElementById("submitBtn");
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      console.log("Submit detectado");
+  e.preventDefault();
+  console.log("Submit detectado");
 
-      const name = document.getElementById("name").value.trim();
-      const lastname = document.getElementById("lastname").value.trim();
-      const id = document.getElementById("id").value.trim();
-      const age = document.getElementById("age").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const grade = document.querySelector('input[name="grado"]:checked')?.value;
-      const guardianName = document.getElementById("guardianName").value.trim();
-      const guardianPhone = document.getElementById("guardianPhone").value.trim();
-      const guardianEmail = document.getElementById("guardianEmail").value.trim();
+  const name = document.getElementById("name").value.trim();
+  const lastname = document.getElementById("lastname").value.trim();
+  const id = document.getElementById("id").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const grade = document.querySelector('input[name="grado"]:checked')?.value;
+  const guardianName = document.getElementById("guardianName").value.trim();
+  const guardianPhone = document.getElementById("guardianPhone").value.trim();
+  const guardianEmail = document.getElementById("guardianEmail").value.trim();
 
-      if (!grade) {
-        alert("Por favor selecciona un grado escolar.");
-        return;
-      }
+  if (!grade) {
+    alert("Por favor selecciona un grado escolar.");
+    return;
+  }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Registrando...";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Registrando...";
 
-      try {
-        const registrosRef = ref(database, "registros");
+  try {
+    const registrosRef = ref(database, "registros");
 
-        const registrosQuery = query(registrosRef, orderByChild("id"), equalTo(id));
-        const snapshot = await get(registrosQuery);
+    const registrosQuery = query(registrosRef, orderByChild("id"), equalTo(id));
+    const snapshot = await get(registrosQuery);
 
-        if (snapshot.exists()) {
-          alert("Este usuario ya está registrado.");
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Registrar Explorador";
-          return;
-        }
+    if (snapshot.exists()) {
+      alert("Este usuario ya está registrado.");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Registrar Explorador";
+      return;
+    }
 
-        await push(registrosRef, {
-          name,
-          lastname,
-          fullName: `${name} ${lastname}`,
-          id,
-          age,
-          grade,
-          address,
-          church,
-          guardianName,
-          guardianPhone,
-          guardianEmail,
-          createdAt: new Date().toISOString()
-        });
-
-        alert("Registro exitoso");
-        form.reset();
-      } catch (error) {
-        console.error("Error completo al registrar:", error);
-        alert("Hubo un error al registrar. Revisa la consola con F12.");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Registrar Explorador";
-      }
+    await push(registrosRef, {
+      name,
+      lastname,
+      fullName: `${name} ${lastname}`,
+      id,
+      age,
+      grade,
+      address,
+      guardianName,
+      guardianPhone,
+      guardianEmail,
+      createdAt: new Date().toISOString()
     });
+
+    alert("Registro exitoso");
+    form.reset();
+  } catch (error) {
+    console.error("Error completo al registrar:", error);
+    alert("Hubo un error al registrar. Revisa la consola con F12.");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Registrar Explorador";
+  }
+});
   </script>
 </body>
 </html>
