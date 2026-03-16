@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Formulario de Inscripción - Exploradores del Rey</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-database-compat.js"></script>
 
   <script>
     tailwind.config = {
@@ -224,7 +226,7 @@
                 </div>
                 <div>
                   <input type="radio" id="secundaria" name="grado" value="secundaria">
-                  <label for="secundaria" class="radio-label text-sm">Secundaria</label>
+                  <label for="secundaria" class="radio-label text-sm">Secundaria</label>  
                 </div>
               </div>
             </div>
@@ -273,86 +275,81 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getDatabase, ref, push, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1v68q4JAT7-UPLxx7szlw09m-Gp-kf98",
+    authDomain: "registro-er-pty.firebaseapp.com",
+    databaseURL: "https://registro-er-pty-default-rtdb.firebaseio.com",
+    projectId: "registro-er-pty",
+    storageBucket: "registro-er-pty.appspot.com",
+    messagingSenderId: "129034311168",
+    appId: "1:129034311168:web:7e43faa000eb0459ef6ae5",
+    measurementId: "G-QWBYRGGRF5"
+  };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyC1v68q4JAT7-UPLxx7szlw09m-Gp-kf98",
-      authDomain: "registro-er-pty.firebaseapp.com",
-      databaseURL: "https://registro-er-pty-default-rtdb.firebaseio.com",
-      projectId: "registro-er-pty",
-      storageBucket: "registro-er-pty.appspot.com",
-      messagingSenderId: "129034311168",
-      appId: "1:129034311168:web:7e43faa000eb0459ef6ae5",
-      measurementId: "G-QWBYRGGRF5"
-    };
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
 
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+  const form = document.getElementById("registerForm");
+  const submitBtn = document.getElementById("submitBtn");
 
-    const form = document.getElementById("registerForm");
-    const submitBtn = document.getElementById("submitBtn");
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    console.log("Submit detectado");
 
-    form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  console.log("Submit detectado");
+    const name = document.getElementById("name").value.trim();
+    const lastname = document.getElementById("lastname").value.trim();
+    const id = document.getElementById("id").value.trim();
+    const age = document.getElementById("age").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const grade = document.querySelector('input[name="grado"]:checked')?.value;
+    const guardianName = document.getElementById("guardianName").value.trim();
+    const guardianPhone = document.getElementById("guardianPhone").value.trim();
+    const guardianEmail = document.getElementById("guardianEmail").value.trim();
 
-  const name = document.getElementById("name").value.trim();
-  const lastname = document.getElementById("lastname").value.trim();
-  const id = document.getElementById("id").value.trim();
-  const age = document.getElementById("age").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const grade = document.querySelector('input[name="grado"]:checked')?.value;
-  const guardianName = document.getElementById("guardianName").value.trim();
-  const guardianPhone = document.getElementById("guardianPhone").value.trim();
-  const guardianEmail = document.getElementById("guardianEmail").value.trim();
-
-  if (!grade) {
-    alert("Por favor selecciona un grado escolar.");
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Registrando...";
-
-  try {
-    const registrosRef = ref(database, "registros");
-
-    const registrosQuery = query(registrosRef, orderByChild("id"), equalTo(id));
-    const snapshot = await get(registrosQuery);
-
-    if (snapshot.exists()) {
-      alert("Este usuario ya está registrado.");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Registrar Explorador";
+    if (!grade) {
+      alert("Por favor selecciona un grado escolar.");
       return;
     }
 
-    await push(registrosRef, {
-      name,
-      lastname,
-      fullName: `${name} ${lastname}`,
-      id,
-      age,
-      grade,
-      address,
-      guardianName,
-      guardianPhone,
-      guardianEmail,
-      createdAt: new Date().toISOString()
-    });
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Registrando...";
 
-    alert("Registro exitoso");
-    form.reset();
-  } catch (error) {
-    console.error("Error completo al registrar:", error);
-    alert("Hubo un error al registrar. Revisa la consola con F12.");
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Registrar Explorador";
-  }
-});
-  </script>
+    try {
+      const registrosRef = database.ref("registros");
+      const snapshot = await registrosRef.orderByChild("id").equalTo(id).once("value");
+
+      if (snapshot.exists()) {
+        alert("Este usuario ya está registrado.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Registrar Explorador";
+        return;
+      }
+
+      await registrosRef.push({
+        name,
+        lastname,
+        fullName: `${name} ${lastname}`,
+        id,
+        age,
+        grade,
+        address,
+        guardianName,
+        guardianPhone,
+        guardianEmail,
+        createdAt: new Date().toISOString()
+      });
+
+      alert("Registro exitoso");
+      form.reset();
+    } catch (error) {
+      console.error("Error completo al registrar:", error);
+      alert("Hubo un error al registrar. Revisa la consola con F12.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Registrar Explorador";
+    }
+  });
+</script>
 </body>
 </html>
